@@ -1,0 +1,5 @@
+pentatonics*/
+*.pyc
+*.mid
+pentatonic scales.txt
+.idea*/
