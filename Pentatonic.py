@@ -169,7 +169,7 @@ def midi(scale, root=60, include_bass=True):
 def write_data(scale, mode_id):
     output = []
     for mode_num, mode in enumerate(get_modes(scale)):
-        scale_str = "\t"
+        scale_str = "    "
         intervals = get_intervals(mode)
         scale_str += ", ".join(str(x) for x in mode).ljust(15)
         scale_str += ' | '
@@ -203,7 +203,7 @@ def write_data(scale, mode_id):
 
 def write_header():
     output = []
-    header = '\t'
+    header = '    '
     header += 'Semitones'.ljust(15)
     header += ' | '
     header += 'Scale Group'.ljust(12)
