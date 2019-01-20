@@ -1,6 +1,10 @@
-header = """The following list contains all pentatonic (5 note) scales that meet the following criteria:
+header = """# Generating Pentatonic Scales Programmatically
+
+The following list contains all pentatonic (5 note) scales that meet the following criteria:
+
   * Made up of minor 2nd, major 2nd, minor 3rd or 3rd intervals
   * Do not have two consecutive minor 2nd intervals
+
 This Results in 25 unique interval patterns, or scale groups, each from which five modes can be constructed, for
 a total of 125 different scales. The scale group number is arbitrary, but scales within the same scale group are 
 modes of each other. For example, the western major and minor pentatonic scales come from scale group 25, 
@@ -8,35 +12,39 @@ Modes 3 and 2 respectively. Scale group 11 is usually referred to as the Japanes
 the Japanese Akebono, In and Iwato scales, while group 6 contains the Insen scale and its modes.
 We represent each scale as numbers of semitones above the root, always starting with zero (the root note)
 
-Some notable scales:
-    0, 2, 4, 7, 9: Major Pentatonic
-    0, 3, 5, 7, 10: Minor Pentatonic
-    0, 4, 5, 7, 10: Dominant 7th
-    0, 2, 4, 7, 10: Dominant 7th Sus2
-    0, 2, 4, 7, 11: Major 7th Sus2
-    0, 4, 5, 7, 11: Major 7th 4th
-    0, 2, 4, 6, 9: Major Sharp 4th
-    0, 3, 5, 7, 9: Minor 6th
-    0, 2, 5, 7, 10: Egyptian scale	
-    0, 2, 3, 7, 8: Hirajoshi, Akebono Scale
-    0, 1, 5, 7, 8: In Scale
-    0, 1, 5, 7, 10: Insen Scale
-    0, 1, 5, 6, 10: Iwato Scale
+## Some notable scales:
 
-Semitones
-    A list of all five notes, as semitones above the root.
-Scale Group
-    A number that identifies which scales comes from the same group. Each scale in a group can be consider
+* 0, 2, 4, 7, 9: Major Pentatonic
+* 0, 3, 5, 7, 10: Minor Pentatonic
+* 0, 4, 5, 7, 10: Dominant 7th
+* 0, 2, 4, 7, 10: Dominant 7th Sus2
+* 0, 2, 4, 7, 11: Major 7th Sus2
+* 0, 4, 5, 7, 11: Major 7th 4th
+* 0, 2, 4, 6, 9: Major Sharp 4th
+* 0, 3, 5, 7, 9: Minor 6th
+* 0, 2, 5, 7, 10: Egyptian scale	
+* 0, 2, 3, 7, 8: Hirajoshi, Akebono Scale
+* 0, 1, 5, 7, 8: In Scale
+* 0, 1, 5, 7, 10: Insen Scale
+* 0, 1, 5, 6, 10: Iwato Scale
+
+
+## Table Definition
+
+* Semitones
+  * A list of all five notes, as semitones above the root.
+* Scale Group
+  * A number that identifies which scales comes from the same group. Each scale in a group can be consider
     to be a mode of the other scales within the same group.
-Mode Number
-    The number from 1 to 5 representing an inversion, or mode, of the scale within its group.
+* Mode Number
+  * The number from 1 to 5 representing an inversion, or mode, of the scale within its group.
     The number is arbitrary and does not hold any significance between different groups
-Flat Representation
-    Lists the intervals in the scale using flats
-Sharp Representation
-    Lists the intervals in the scale using sharps
-Features
-    Identifies scales which encompass major and minor triads, as well as minor 7th, dominant 7th and major 7ths	
+* Flat Representation
+  * Lists the intervals in the scale using flats
+* Sharp Representation
+  * Lists the intervals in the scale using sharps
+* Features
+  * Identifies scales which encompass major and minor triads, as well as minor 7th, dominant 7th and major 7ths	
     
 """
 
@@ -161,7 +169,7 @@ def midi(scale, root=60, include_bass=True):
 def write_data(scale, mode_id):
     output = []
     for mode_num, mode in enumerate(get_modes(scale)):
-        scale_str = ""
+        scale_str = "\t"
         intervals = get_intervals(mode)
         scale_str += ", ".join(str(x) for x in mode).ljust(15)
         scale_str += ' | '
@@ -195,7 +203,8 @@ def write_data(scale, mode_id):
 
 def write_header():
     output = []
-    header = 'Semitones'.ljust(15)
+    header = '\t'
+    header += 'Semitones'.ljust(15)
     header += ' | '
     header += 'Scale Group'.ljust(12)
     header += ' | '
