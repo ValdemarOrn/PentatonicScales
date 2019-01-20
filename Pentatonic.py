@@ -1,14 +1,56 @@
-import os
+header = """The following list contains all pentatonic (5 note) scales that meet the following criteria:
+  * Made up of minor 2nd, major 2nd, minor 3rd or 3rd intervals
+  * Do not have two consecutive minor 2nd intervals
+This Results in 25 unique interval patterns, or scale groups, each from which five modes can be constructed, for
+a total of 125 different scales. The scale group number is arbitrary, but scales within the same scale group are 
+modes of each other. For example, the western major and minor pentatonic scales come from scale group 25, 
+Modes 3 and 2 respectively. Scale group 11 is usually referred to as the Japanese Hirajoshi scale, which contains 
+the Japanese Akebono, In and Iwato scales, while group 6 contains the Insen scale and its modes.
+We represent each scale as numbers of semitones above the root, always starting with zero (the root note)
+
+Some notable scales:
+    0, 2, 4, 7, 9: Major Pentatonic
+    0, 3, 5, 7, 10: Minor Pentatonic
+    0, 4, 5, 7, 10: Dominant 7th
+    0, 2, 4, 7, 10: Dominant 7th Sus2
+    0, 2, 4, 7, 11: Major 7th Sus2
+    0, 4, 5, 7, 11: Major 7th 4th
+    0, 2, 4, 6, 9: Major Sharp 4th
+    0, 3, 5, 7, 9: Minor 6th
+    0, 2, 5, 7, 10: Egyptian scale	
+    0, 2, 3, 7, 8: Hirajoshi, Akebono Scale
+    0, 1, 5, 7, 8: In Scale
+    0, 1, 5, 7, 10: Insen Scale
+    0, 1, 5, 6, 10: Iwato Scale
+
+Semitones
+    A list of all five notes, as semitones above the root.
+Scale Group
+    A number that identifies which scales comes from the same group. Each scale in a group can be consider
+    to be a mode of the other scales within the same group.
+Mode Number
+    The number from 1 to 5 representing an inversion, or mode, of the scale within its group.
+    The number is arbitrary and does not hold any significance between different groups
+Flat Representation
+    Lists the intervals in the scale using flats
+Sharp Representation
+    Lists the intervals in the scale using sharps
+Features
+    Identifies scales which encompass major and minor triads, as well as minor 7th, dominant 7th and major 7ths	
+    
+"""
+
 
 def bits(input):
     return bin(input).count("1")
+
 
 def get_modes(scale):
     output = []
     for i in range(len(scale)):
         output.append(scale)
         offset = scale[1]
-        mode = tuple(s-offset for s in scale)
+        mode = tuple(s - offset for s in scale)
         mode = mode[1:] + (mode[0] + 12,)
         scale = mode
     return output
@@ -30,6 +72,7 @@ def intervals(tpl):
         interval = tpl[i + 1] - tpl[i]
         output.append(interval)
     return output
+
 
 def is_squished(tpl):
     v = intervals(tpl)
@@ -53,7 +96,7 @@ def is_large(tpl):
 
 def generate():
     known = []
-    for i in range(2**12):
+    for i in range(2 ** 12):
         if bits(i) != 5 or (i % 2) != 1:
             continue
 
@@ -76,11 +119,12 @@ def filter_scales(known):
         good.append(tpl)
     return good
 
+
 def note_sequence(scale):
     # two octave run, up then down
     reverse = scale[::-1]
     reverse = (12,) + reverse[:-1]
-    return scale + tuple(s+12 for s in scale) + tuple(s+12 for s in reverse) + reverse + (0,)
+    return scale + tuple(s + 12 for s in scale) + tuple(s + 12 for s in reverse) + reverse + (0,)
 
 
 def midi(scale, root=60, include_bass=True):
@@ -100,18 +144,19 @@ def midi(scale, root=60, include_bass=True):
 
         if include_bass:
             MyMIDI.addNote(track, channel, root - 12, time, duration * 5, volume)
-            MyMIDI.addNote(track, channel, root - 12, time+5, duration * 5, volume)
-            MyMIDI.addNote(track, channel, root - 12, time+10, duration * 5, volume)
-            MyMIDI.addNote(track, channel, root - 12, time+15, duration * 5, volume)
-            MyMIDI.addNote(track, channel, root - 12, time+20, duration, volume)
+            MyMIDI.addNote(track, channel, root - 12, time + 5, duration * 5, volume)
+            MyMIDI.addNote(track, channel, root - 12, time + 10, duration * 5, volume)
+            MyMIDI.addNote(track, channel, root - 12, time + 15, duration * 5, volume)
+            MyMIDI.addNote(track, channel, root - 12, time + 20, duration, volume)
 
         for i, pitch in enumerate(sequence):
-            MyMIDI.addNote(track, channel, root+pitch, time+i+0.02, duration, volume)
+            MyMIDI.addNote(track, channel, root + pitch, time + i + 0.02, duration, volume)
 
         filename = str(mode)[1:-1]
         out_file = filename + ".mid"
         with open(out_file, "wb") as output_file:
             MyMIDI.writeFile(output_file)
+
 
 def write_data(scale, mode_id):
     output = []
@@ -208,24 +253,20 @@ def get_intervals(scale):
 
     return flats, sharps
 
+
 def main():
-    base_dir = r'C:\Src\_Tree\Audio\Pentatonic Python\pentatonics'
-    os.chdir(base_dir)
     known = generate()
     good_scales = filter_scales(known)
     data = []
     for i, scale in enumerate(good_scales):
-        data.extend(write_data(scale, i+1))
+        data.extend(write_data(scale, i + 1))
         midi(scale)
 
-    data = write_header() + sorted(data)
-    print(data)
-    os.chdir(base_dir)
+    sorter = lambda line: tuple(int(i) for i in line.split('|')[0].split(','))
+    data = write_header() + sorted(data, key=sorter)
     with open('scale_info.txt', "w") as f:
+        f.write(header)
         f.writelines((x + '\n' for x in data))
 
+
 main()
-
-
-
-
