@@ -45,7 +45,8 @@ We represent each scale as numbers of semitones above the root, always starting 
   * Lists the intervals in the scale using sharps
 * Features
   * Identifies scales which encompass major and minor triads, as well as minor 7th, dominant 7th and major 7ths	
-    
+
+```
 """
 
 
@@ -273,6 +274,7 @@ def main():
 
     sorter = lambda line: tuple(int(i) for i in line.split('|')[0].split(','))
     data = write_header() + sorted(data, key=sorter)
+    data.append('```')
     with open('scale_info.txt', "w") as f:
         f.write(header)
         f.writelines((x + '\n' for x in data))

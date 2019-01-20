@@ -45,7 +45,8 @@ We represent each scale as numbers of semitones above the root, always starting 
   * Lists the intervals in the scale using sharps
 * Features
   * Identifies scales which encompass major and minor triads, as well as minor 7th, dominant 7th and major 7ths	
-    
+
+```
     Semitones       | Scale Group  | Mode Number  | Flat Repr.         | Sharp Repr.        | Features          
     0, 1, 3, 4, 8   | 1            | 2            | 1, b2, b3, 3, b6   | 1, #1, #2, 3, #5   | 
     0, 1, 3, 5, 8   | 19           | 1            | 1, b2, b3, 4, b6   | 1, #1, #2, 4, #5   | 
@@ -172,3 +173,4 @@ We represent each scale as numbers of semitones above the root, always starting 
     0, 4, 7, 9, 10  | 3            | 5            | 1, 3, 5, 6, b7     | 1, 3, 5, 6, #6     | Dom7
     0, 4, 7, 9, 11  | 2            | 5            | 1, 3, 5, 6, 7      | 1, 3, 5, 6, 7      | Maj7
     0, 4, 8, 9, 11  | 1            | 5            | 1, 3, b6, 6, 7     | 1, 3, #5, 6, 7     | 
+```
