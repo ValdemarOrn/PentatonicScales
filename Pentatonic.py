@@ -275,7 +275,7 @@ def main():
     sorter = lambda line: tuple(int(i) for i in line.split('|')[0].split(','))
     data = write_header() + sorted(data, key=sorter)
     data.append('```')
-    with open('scale_info.txt', "w") as f:
+    with open('_scale_info.txt', "w") as f:
         f.write(header)
         f.writelines((x + '\n' for x in data))
 
